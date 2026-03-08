@@ -1,0 +1,21 @@
+CREATE OR REPLACE TABLE IOT.IOT_RAW.PROD_LOG_FH (
+  EVENT_ID                                                STRING,
+  SOURCE_FILE_PATH                                        STRING,
+  SOURCE_ROW_NUMBER                                       NUMBER(38,0),
+  "時刻"                                                  TIMESTAMP_NTZ,
+  "Nコード"                                               STRING,
+  "ラインNo."                                             STRING,
+  "0:生産開始/1:定時/2：一時停止/3:生産終了/4:定時終了"   NUMBER(1,0),
+  "T投入数[個]"                                           NUMBER(18,0),
+  "T生産数[個]"                                           NUMBER(18,0),
+  "T梱包数[個]"                                           NUMBER(18,0),
+  "現在計画数[個]"                                        NUMBER(18,0),
+  "進捗率[%]"                                             NUMBER(18,1),
+  "T計画数[個]"                                           NUMBER(18,0),
+  "計画ﾏｼﾝﾀｸﾄ[10ms]"                                      NUMBER(18,0),
+  "平均ﾀｸﾄ[10ms]"                                         NUMBER(18,0),
+  "T不良数[個]"                                           NUMBER(18,0),
+  "T不良率ppm"                                            NUMBER(18,0),
+  CREATED_AT                                              TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP(),
+  UPDATED_AT                                              TIMESTAMP_NTZ
+);
