@@ -1,0 +1,35 @@
+# sftp_run_winscp.txt
+# 引数マッピング（run_winscp.bat から /parameter で受領）
+#   !1 = SESSION     （例: sftp://user@host:22/ -hostkey="..." -privatekey="..."）
+#   !2 = SRC_DIR     （ローカルの送信元ディレクトリ）
+#   !3 = DEST_DIR    （リモートの転送先ディレクトリ）
+#   !4 = FILE_PATTERN（送信対象のパターン例 *.csv）
+#
+# フロー:
+#   1) 接続 → 2) リモートの既存ファイルを bak/ へ退避（エラー無視で続行）
+#      → 3) ローカルから対象をアップロード（失敗時は即中断）
+# 備考:
+#   - option batch abort によりコマンド失敗時は即終了し、winscp.com の終了コードは非0となる
+#   - 戻り値は呼び出し側で %ERRORLEVEL% として受け取れる
+
+# --- 既定: エラー発生時は即終了（RC非0）／確認ダイアログ無効化／バイナリ固定 ---
+option batch abort
+option confirm off
+option transfer binary
+
+# --- セッションを開く（!1: sftp://... -hostkey="..." -privatekey="..."） ---
+open %1%
+
+# --- リモートの作業ディレクトリへ移動（存在しないとエラー） ---
+cd "%3%"
+
+
+# --- 退避対象が無い場合にエラーにしないための設定（この区間のみ無効化→直後に復帰）---
+mv "%4%" bak/
+
+# --- ローカル送信元へ移動し、再開可でアップロード ---
+lcd "%2%"
+put -resume "%4%"
+
+# --- スクリプト終了（成功=0 / 失敗=非0 を winscp.com の終了コードとして返す） ---
+exit

@@ -1,0 +1,14 @@
+﻿# sftp_run_winscp.txt（共通スクリプト：bak無し・上書きPUT）
+# エンコード/改行: UTF-8（BOMあり）/ CRLF  ← WinSCPのUnicode要件に合わせる
+# パラメータ    : %1=SESSION, %2=SRC_DIR, %3=DEST_DIR, %4=FILE_PATTERN
+# 役割          : 事前削除が不要な通常運用。DESTへ常時上書きで put する。
+
+option batch abort
+option confirm off
+option transfer binary
+
+open %1%
+cd "%3%"
+lcd "%2%"
+put -resumesupport=off "%4%"
+exit
